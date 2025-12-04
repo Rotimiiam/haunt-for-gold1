@@ -1,0 +1,29 @@
+{
+  "mcpServers": {
+    "curacel-health": {
+      "command": "python",
+      "args": ["-u", "mcp_http_client.py", "http://vehicle-assessment-mcp-alb-1521086687.us-east-2.elb.amazonaws.com"],
+      "env": {
+        "CURACEL_API_TOKEN": "83|wS3tKTr8jRr1BGygSZyvYjminDSrJay6buZkngYkc5e06c79",
+        "PYTHONPATH": ".",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "disabled": false,
+      "autoApprove": [
+        "assess_vehicle_simple",
+        "assess_vehicle_with_files",
+        "assess_vehicle_flexible",
+        "get_assessment_history",
+        "get_assessment_stats",
+        "test_api_connection"
+      ]
+    },
+    "Context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp", "--api-key", "YOUR_API_KEY"],
+      "env": {},
+      "disabled": false,
+      "autoApprove": []
+    }
+  }
+}

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Pause & Decorations</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #0d0d0d;
+            color: #00ff41;
+            font-family: 'Courier New', monospace;
+        }
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        button {
+            background: #1a0a2e;
+            color: #00ff41;
+            border: 2px solid #00ff41;
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        button:hover {
+            background: #00ff41;
+            color: #0d0d0d;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            background: #1a0a2e;
+            border-left: 4px solid #00ff41;
+        }
+        #testCanvas {
+            border: 2px solid #00ff41;
+            display: block;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🎃 Pause & Decorations Test</h1>
+        
+        <div class="status">
+            <strong>Decorations Status:</strong> <span id="decorStatus">Checking...</span><br>
+            <strong>Pause State:</strong> <span id="pauseStatus">Not paused</span><br>
+            <strong>Enemy Movement:</strong> <span id="enemyStatus">Active</span>
+        </div>
+
+        <div>
+            <button onclick="testPause()">Toggle Pause</button>
+            <button onclick="checkDecorations()">Check Decorations</button>
+            <button onclick="testEnemyMovement()">Test Enemy Movement</button>
+        </div>
+
+        <canvas id="testCanvas" width="640" height="480"></canvas>
+
+        <div id="log" style="background: #000; padding: 10px; margin-top: 20px; height: 200px; overflow-y: auto;"></div>
+    </div>
+
+    <script src="halloween-decorations.js"></script>
+    <script>
+        let isPaused = false;
+        let enemyX = 5;
+        let enemyY = 5;
+        let enemyInterval = null;
+
+        // Mock game state
+        window.localGameState = {
+            isPaused: false,
+            gameEnded: false,
+            enemies: [{ x: 5, y: 5, direction: 0 }]
+        };
+
+        function log(message) {
+            const logDiv = document.getElementById('log');
+            const time = new Date().toLocaleTimeString();
+            logDiv.innerHTML += `[${time}] ${message}<br>`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+
+        function testPause() {
+            isPaused = !isPaused;
+            window.localGameState.isPaused = isPaused;
+            
+            document.getElementById('pauseStatus').textContent = isPaused ? 'PAUSED' : 'Not paused';
+            document.getElementById('pauseStatus').style.color = isPaused ? '#ff4444' : '#00ff41';
+            
+            log(`Pause toggled: ${isPaused ? 'PAUSED' : 'RESUMED'}`);
+        }
+
+        function checkDecorations() {
+            const container = document.getElementById('halloween-decorations');
+            if (container) {
+                const decorCount = container.querySelectorAll('img').length;
+                document.getElementById('decorStatus').textContent = `✓ Found (${decorCount} elements)`;
+                document.getElementById('decorStatus').style.color = '#00ff41';
+                log(`✓ Decorations container found with ${decorCount} images`);
+                
+                // List all decorations
+                container.querySelectorAll('img').forEach((img, i) => {
+                    log(`  - Decoration ${i + 1}: ${img.src.split('/').pop()}`);
+                });
+            } else {
+                document.getElementById('decorStatus').textContent = '✗ Not found';
+                document.getElementById('decorStatus').style.color = '#ff4444';
+                log('✗ Decorations container not found!');
+            }
+        }
+
+        function testEnemyMovement() {
+            if (enemyInterval) {
+                clearInterval(enemyInterval);
+                enemyInterval = null;
+                document.getElementById('enemyStatus').textContent = 'Stopped';
+                log('Enemy movement stopped');
+                return;
+            }
+
+            log('Starting enemy movement test...');
+            document.getElementById('enemyStatus').textContent = 'Active';
+            
+            enemyInterval = setInterval(() => {
+                // This mimics the actual game logic
+                if (window.localGameState.gameEnded) {
+                    log('Enemy stopped: game ended');
+                    return;
+                }
+                if (window.localGameState.isPaused) {
+                    log('Enemy stopped: game paused');
+                    return;
+                }
+                
+                // Move enemy
+                enemyX += 1;
+                if (enemyX > 15) enemyX = 5;
+                
+                log(`Enemy moved to position: ${enemyX}, ${enemyY}`);
+                drawEnemy();
+            }, 500);
+        }
+
+        function drawEnemy() {
+            const canvas = document.getElementById('testCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Clear canvas
+            ctx.fillStyle = '#0d0d0d';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw grid
+            ctx.strokeStyle = '#1a0a2e';
+            for (let i = 0; i < 20; i++) {
+                ctx.beginPath();
+                ctx.moveTo(i * 32, 0);
+                ctx.lineTo(i * 32, canvas.height);
+                ctx.stroke();
+            }
+            for (let i = 0; i < 15; i++) {
+                ctx.beginPath();
+                ctx.moveTo(0, i * 32);
+                ctx.lineTo(canvas.width, i * 32);
+                ctx.stroke();
+            }
+            
+            // Draw enemy (witch)
+            ctx.fillStyle = '#ff4444';
+            ctx.fillRect(enemyX * 32, enemyY * 32, 32, 32);
+            
+            // Draw pause indicator if paused
+            if (isPaused) {
+                ctx.fillStyle = 'rgba(255, 68, 68, 0.5)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = '#fff';
+                ctx.font = '48px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('PAUSED', canvas.width / 2, canvas.height / 2);
+            }
+        }
+
+        // Initial checks
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                checkDecorations();
+                drawEnemy();
+                log('Test page loaded. Try the buttons above!');
+            }, 500);
+        });
+
+        // Render loop
+        setInterval(drawEnemy, 100);
+    </script>
+</body>
+</html>

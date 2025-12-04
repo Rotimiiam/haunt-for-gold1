@@ -1,0 +1,10 @@
+node_modules/
+.env
+.env.local
+database.sqlite
+sync_config.jsonc
+*.log
+.DS_Store
+.vscode/
+.kiro/
+.git/
