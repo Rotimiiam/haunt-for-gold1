@@ -1,0 +1,294 @@
+/**
+ * Accessibility Enhancements - Haunt For Gold
+ * Ensures the game is accessible to all players
+ */
+
+/* ==================== Screen Reader Only ==================== */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.sr-only-focusable:focus {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: inherit;
+  margin: inherit;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
+/* ==================== Focus Indicators ==================== */
+*:focus-visible {
+  outline: 2px solid var(--ghost-green, #00ff41);
+  outline-offset: 2px;
+  transition: outline 0.2s ease-in-out;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--ghost-green, #00ff41);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(0, 255, 65, 0.2);
+}
+
+/* ==================== Skip Links ==================== */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--ghost-green, #00ff41);
+  color: var(--spooky-black, #0d0d0d);
+  padding: 8px 16px;
+  text-decoration: none;
+  font-weight: bold;
+  z-index: 10000;
+  border-radius: 0 0 8px 0;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* ==================== High Contrast Mode ==================== */
+@media (prefers-contrast: high) {
+  :root {
+    --ghost-green: #00ff00;
+    --pumpkin-orange: #ff9900;
+    --cursed-gold: #ffff00;
+  }
+
+  button,
+  a,
+  input,
+  select {
+    border: 2px solid currentColor;
+  }
+
+  .btn-primary {
+    background: #00ff00 !important;
+    color: #000000 !important;
+  }
+
+  .btn-secondary {
+    background: #0000ff !important;
+    color: #ffffff !important;
+  }
+}
+
+/* ==================== Reduced Motion ==================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .floating-decoration,
+  .fog-layer,
+  .glow-effect {
+    animation: none !important;
+  }
+}
+
+/* ==================== Keyboard Navigation Enhancement ==================== */
+.keyboard-nav *:focus {
+  outline: 2px solid var(--ghost-green, #00ff41);
+  outline-offset: 2px;
+}
+
+/* Hide focus outline for mouse users */
+.mouse-nav *:focus {
+  outline: none;
+}
+
+/* But always show for keyboard navigation */
+.keyboard-nav *:focus-visible {
+  outline: 2px solid var(--ghost-green, #00ff41) !important;
+  outline-offset: 2px !important;
+}
+
+/* ==================== Touch Target Sizes ==================== */
+@media (pointer: coarse) {
+  /* Ensure touch targets are at least 44x44 pixels */
+  button,
+  a,
+  input[type="checkbox"],
+  input[type="radio"],
+  .control-btn {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 12px;
+  }
+}
+
+/* ==================== Color Blindness Support ==================== */
+/* Pattern-based indicators alongside color */
+.status-success::before {
+  content: '✓ ';
+  font-weight: bold;
+}
+
+.status-error::before {
+  content: '✗ ';
+  font-weight: bold;
+}
+
+.status-warning::before {
+  content: '⚠ ';
+  font-weight: bold;
+}
+
+.status-info::before {
+  content: 'ℹ ';
+  font-weight: bold;
+}
+
+/* ==================== Improved Text Readability ==================== */
+.readable-text {
+  font-size: 16px;
+  line-height: 1.5;
+  max-width: 70ch;
+}
+
+/* Ensure minimum contrast ratios */
+.text-contrast {
+  color: #ffffff;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+/* ==================== ARIA Live Regions ==================== */
+.aria-live-polite {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+[aria-live="polite"],
+[aria-live="assertive"] {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* ==================== Improved Form Labels ==================== */
+label {
+  cursor: pointer;
+  display: block;
+  margin-bottom: 4px;
+}
+
+input:required + label::after {
+  content: ' *';
+  color: #ef4444;
+}
+
+/* ==================== Error State Indicators ==================== */
+[aria-invalid="true"],
+.error {
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2) !important;
+}
+
+.error-message {
+  color: #ef4444;
+  font-size: 0.875rem;
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.error-message::before {
+  content: '⚠';
+}
+
+/* ==================== Loading States ==================== */
+[aria-busy="true"] {
+  opacity: 0.6;
+  pointer-events: none;
+  cursor: wait;
+}
+
+/* ==================== Dialog/Modal Accessibility ==================== */
+.modal[role="dialog"],
+.modal[role="alertdialog"] {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Trap focus within modal */
+.modal-open {
+  overflow: hidden;
+}
+
+/* ==================== Disabled State ==================== */
+[disabled],
+[aria-disabled="true"] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ==================== Text Zoom Support ==================== */
+@media (min-resolution: 120dpi) {
+  body {
+    font-size: 18px;
+  }
+}
+
+/* Support for browser zoom */
+@media (min-resolution: 144dpi) {
+  body {
+    font-size: 20px;
+  }
+}
+
+/* ==================== Dark Mode Already Applied ==================== */
+/* Game uses dark theme by default, ensure it works with system preferences */
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+  }
+}
+
+/* ==================== Print Styles ==================== */
+@media print {
+  .no-print,
+  .decorations,
+  .fog-layer,
+  button,
+  .controls {
+    display: none !important;
+  }
+
+  body {
+    background: white;
+    color: black;
+  }
+
+  a::after {
+    content: " (" attr(href) ")";
+  }
+}

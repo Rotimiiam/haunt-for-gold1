@@ -125,6 +125,11 @@ class GameLifecycleManager {
     // Clean up all game modes
     this.cleanup();
 
+    // Stop background music if function exists
+    if (typeof stopBackgroundMusic === 'function') {
+      stopBackgroundMusic();
+    }
+
     // Hide all game UI elements
     const elementsToHide = [
       'gameCanvas',
@@ -155,6 +160,14 @@ class GameLifecycleManager {
         el.style.display = 'none';
       });
     });
+
+    // Exit fullscreen mode if active
+    if (document.body.classList.contains('fullscreen-mode')) {
+      document.body.classList.remove('fullscreen-mode');
+      if (typeof resetCanvasSize === 'function') {
+        resetCanvasSize();
+      }
+    }
 
     // Show home screen
     const homeScreen = document.getElementById('homeScreen');
