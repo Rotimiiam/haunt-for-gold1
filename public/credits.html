@@ -8,6 +8,10 @@
   <title>Credits - Haunt For Gold</title>
   <link rel="stylesheet" href="css/spooky-theme.css">
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       padding: 0;
@@ -18,11 +22,111 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      position: relative;
+    }
+
+    /* Spooky vignette overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(ellipse at center, transparent 0%, rgba(0, 0, 0, 0.4) 100%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .credits-wrapper {
+      width: 100%;
+      max-width: 1000px;
+      padding: 20px;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Table of Contents */
+    .toc {
+      position: sticky;
+      top: 20px;
+      background: rgba(0, 0, 0, 0.6);
+      border: 2px solid #2d1b4e;
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 30px;
+      backdrop-filter: blur(10px);
+    }
+
+    .toc h3 {
+      color: #ffd700;
+      margin: 0 0 10px 0;
+      font-size: 1rem;
+      text-align: center;
+    }
+
+    .toc ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .toc li {
+      margin: 0;
+    }
+
+    .toc a {
+      color: #00ff41;
+      text-decoration: none;
+      padding: 5px 10px;
+      background: rgba(0, 255, 65, 0.1);
+      border-radius: 5px;
+      font-size: 0.85rem;
+      transition: all 0.3s ease;
+      display: inline-block;
+    }
+
+    .toc a:hover {
+      background: rgba(0, 255, 65, 0.3);
+      text-shadow: 0 0 5px #00ff41;
+    }
+
+    /* Search bar */
+    .search-container {
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    .search-input {
+      width: 100%;
+      max-width: 500px;
+      padding: 12px 20px;
+      background: rgba(0, 0, 0, 0.6);
+      border: 2px solid #2d1b4e;
+      border-radius: 8px;
+      color: #00ff41;
+      font-family: 'Courier New', monospace;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: #00ff41;
+      box-shadow: 0 0 10px rgba(0, 255, 65, 0.3);
+    }
+
+    .search-input::placeholder {
+      color: #6b7280;
     }
 
     .credits-container {
-      max-width: 800px;
-      padding: 40px 20px;
+      max-width: 100%;
+      padding: 0;
       text-align: center;
     }
 
@@ -31,16 +135,29 @@
       text-shadow: 0 0 20px #00ff41, 0 0 40px #00ff41;
       font-size: 2.5rem;
       margin-bottom: 10px;
+      animation: glow 2s ease-in-out infinite;
+    }
+
+    @keyframes glow {
+      0%, 100% { text-shadow: 0 0 20px #00ff41, 0 0 40px #00ff41; }
+      50% { text-shadow: 0 0 30px #00ff41, 0 0 60px #00ff41; }
+    }
+
+    .subtitle {
+      color: #b0b0b0;
+      font-size: 1rem;
+      margin-bottom: 30px;
     }
 
     h2 {
       color: #ff6b00;
       text-shadow: 0 0 10px #ff6b00;
       font-size: 1.5rem;
-      margin-top: 40px;
+      margin-top: 50px;
       margin-bottom: 20px;
       border-bottom: 2px solid #ff6b00;
       padding-bottom: 10px;
+      scroll-margin-top: 80px;
     }
 
     .credit-item {
@@ -50,6 +167,13 @@
       padding: 15px 20px;
       margin: 15px 0;
       text-align: left;
+      transition: all 0.3s ease;
+    }
+
+    .credit-item:hover {
+      background: rgba(0, 0, 0, 0.6);
+      border-color: #6a0dad;
+      transform: translateY(-2px);
     }
 
     .credit-item h3 {
@@ -62,11 +186,13 @@
       margin: 5px 0;
       color: #b0b0b0;
       font-size: 0.95rem;
+      line-height: 1.6;
     }
 
     .credit-item a {
       color: #00ff41;
       text-decoration: none;
+      transition: all 0.2s ease;
     }
 
     .credit-item a:hover {
@@ -74,9 +200,20 @@
       text-shadow: 0 0 5px #00ff41;
     }
 
+    .credit-item .license-badge {
+      display: inline-block;
+      background: rgba(106, 13, 173, 0.3);
+      border: 1px solid #6a0dad;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      color: #9370db;
+      margin-top: 5px;
+    }
+
     .back-btn {
       display: inline-block;
-      margin-top: 40px;
+      margin: 40px 0;
       padding: 15px 40px;
       background: linear-gradient(135deg, #2d1b4e, #1a0a2e);
       border: 2px solid #00ff41;
@@ -93,6 +230,7 @@
       background: #00ff41;
       color: #1a0a2e;
       box-shadow: 0 0 20px #00ff41;
+      transform: translateY(-2px);
     }
 
     .emoji {
@@ -106,89 +244,395 @@
       border: 1px solid #00ff41;
       border-radius: 10px;
       font-size: 0.9rem;
+      text-align: left;
+    }
+
+    .license-note strong {
+      color: #ffd700;
+    }
+
+    /* Scroll to top button */
+    .scroll-to-top {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(135deg, #2d1b4e, #6a0dad);
+      border: 2px solid #00ff41;
+      border-radius: 50%;
+      color: #00ff41;
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .scroll-to-top:hover {
+      background: #00ff41;
+      color: #1a0a2e;
+      transform: translateY(-5px);
+      box-shadow: 0 0 20px #00ff41;
+    }
+
+    .scroll-to-top.visible {
+      display: flex;
+    }
+
+    /* Responsive design */
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2rem;
+      }
+
+      h2 {
+        font-size: 1.3rem;
+      }
+
+      .credits-wrapper {
+        padding: 10px;
+      }
+
+      .toc ul {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .toc a {
+        display: block;
+        text-align: center;
+      }
+
+      .scroll-to-top {
+        bottom: 20px;
+        right: 20px;
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+      }
+    }
+
+    /* Hidden class for search filtering */
+    .hidden {
+      display: none !important;
     }
   </style>
 </head>
 <body>
-  <div class="credits-container">
-    <h1>👻 Credits & Attributions 🎃</h1>
-    <p>Thank you to all the creators whose work made this game possible!</p>
+  <div class="credits-wrapper">
+    <!-- Table of Contents -->
+    <nav class="toc" aria-label="Table of Contents">
+      <h3>📜 Quick Navigation</h3>
+      <ul>
+        <li><a href="#development">👨‍💻 Development</a></li>
+        <li><a href="#music">🎵 Music</a></li>
+        <li><a href="#sounds">🔊 Sounds</a></li>
+        <li><a href="#graphics">🎨 Graphics</a></li>
+        <li><a href="#technologies">🛠️ Technologies</a></li>
+        <li><a href="#special-thanks">💖 Thanks</a></li>
+      </ul>
+    </nav>
 
-    <h2><span class="emoji">🎵</span> Music</h2>
-    
-    <div class="credit-item">
-      <h3>Haunted House (Home Screen Music)</h3>
-      <p><strong>Artist:</strong> AethericSource</p>
-      <p><strong>Source:</strong> <a href="https://freetouse.com/music" target="_blank">freetouse.com/music</a></p>
-      <p>Music for Video (Free Download)</p>
+    <!-- Search Bar -->
+    <div class="search-container">
+      <input 
+        type="text" 
+        class="search-input" 
+        id="searchInput" 
+        placeholder="🔍 Search credits..."
+        aria-label="Search credits"
+      >
     </div>
 
-    <div class="credit-item">
-      <h3>Halloween Background Music (In-Game Music)</h3>
-      <p><strong>Artist:</strong> SigmaMusicArt</p>
-      <p><strong>Source:</strong> <a href="https://pixabay.com/users/sigmamusicart-36860929/" target="_blank">Pixabay - SigmaMusicArt</a></p>
-      <p><strong>License:</strong> Pixabay Content License (Free for commercial use)</p>
+    <div class="credits-container">
+      <h1>👻 Credits & Attributions 🎃</h1>
+      <p class="subtitle">Thank you to all the creators whose work made this game possible!</p>
+
+      <section id="development">
+        <h2><span class="emoji">👨‍💻</span> Development Team</h2>
+
+        <div class="credit-item">
+          <h3>Haunt For Gold Game</h3>
+          <p><strong>Created for:</strong> Halloween Costume Contest Hackathon 2024</p>
+          <p><strong>Game Type:</strong> Real-time multiplayer pixel art coin collection game</p>
+          <p><strong>Theme:</strong> Spooky Halloween with haunted gold rush atmosphere</p>
+          <p><strong>Features:</strong> Online multiplayer, local multiplayer, practice mode, gamepad support</p>
+          <span class="license-badge">ISC License - Copyright © 2025</span>
+        </div>
+
+        <div class="credit-item">
+          <h3>Lead Developer & Designer</h3>
+          <p><strong>Repository Owner:</strong> Rotimiiam</p>
+          <p><strong>Role:</strong> Full-stack development, game design, UI/UX implementation</p>
+          <p><strong>Technologies Used:</strong> Node.js, Express, Socket.IO, HTML5 Canvas, Vanilla JavaScript</p>
+        </div>
+      </section>
+
+      <section id="music">
+        <h2><span class="emoji">🎵</span> Music</h2>
+        
+        <div class="credit-item">
+          <h3>Haunted House (Home Screen Music)</h3>
+          <p><strong>Artist:</strong> AethericSource</p>
+          <p><strong>Source:</strong> <a href="https://freetouse.com/music" target="_blank" rel="noopener noreferrer">freetouse.com/music</a></p>
+          <p><strong>Description:</strong> Eerie ambient music perfect for setting a spooky atmosphere</p>
+          <p><strong>Usage:</strong> Home screen background music</p>
+          <span class="license-badge">Music for Video (Free Download)</span>
+        </div>
+
+        <div class="credit-item">
+          <h3>Halloween Background Music (In-Game Music)</h3>
+          <p><strong>Artist:</strong> SigmaMusicArt</p>
+          <p><strong>Source:</strong> <a href="https://pixabay.com/users/sigmamusicart-36860929/" target="_blank" rel="noopener noreferrer">Pixabay - SigmaMusicArt</a></p>
+          <p><strong>Description:</strong> Upbeat spooky music for active gameplay</p>
+          <p><strong>Usage:</strong> Background music during gameplay</p>
+          <span class="license-badge">Pixabay Content License - Free for commercial use</span>
+        </div>
+
+        <div class="credit-item">
+          <h3>8-Bit Video Game Background Music Loop</h3>
+          <p><strong>Source:</strong> Pixabay / Free Music Archive</p>
+          <p><strong>Style:</strong> Retro 8-bit chiptune music</p>
+          <p><strong>Usage:</strong> Alternate gameplay music track</p>
+          <span class="license-badge">Pixabay Content License</span>
+        </div>
+
+        <div class="credit-item">
+          <h3>The Race Is On - Racing Soundtrack</h3>
+          <p><strong>Source:</strong> Pixabay / Free Music Archive</p>
+          <p><strong>Style:</strong> Fast-paced competitive music</p>
+          <p><strong>Usage:</strong> High-intensity gameplay moments</p>
+          <span class="license-badge">Pixabay Content License</span>
+        </div>
+
+        <div class="credit-item">
+          <h3>The Return of the 8-Bit Era</h3>
+          <p><strong>Source:</strong> Pixabay / Free Music Archive</p>
+          <p><strong>Style:</strong> Nostalgic 8-bit retro soundtrack</p>
+          <p><strong>Usage:</strong> Retro-themed gameplay sessions</p>
+          <span class="license-badge">Pixabay Content License</span>
+        </div>
+      </section>
+
+      <section id="sounds">
+        <h2><span class="emoji">🔊</span> Sound Effects</h2>
+
+        <div class="credit-item">
+          <h3>Explosion Sound Effect</h3>
+          <p><strong>Source:</strong> <a href="https://www.zapsplat.com" target="_blank" rel="noopener noreferrer">Zapsplat.com</a></p>
+          <p><strong>Description:</strong> Dramatic explosion sound for bomb impacts</p>
+          <p><strong>Usage:</strong> Triggered when players hit bombs</p>
+          <span class="license-badge">Zapsplat Standard License</span>
+        </div>
+
+        <div class="credit-item">
+          <h3>Witch Cackle</h3>
+          <p><strong>Source:</strong> Free Sound Effects</p>
+          <p><strong>Description:</strong> Spooky witch laughter sound</p>
+          <p><strong>Usage:</strong> Enemy character sound effects</p>
+          <span class="license-badge">Public Domain</span>
+        </div>
+
+        <div class="credit-item">
+          <h3>Coin Collection Sound</h3>
+          <p><strong>Type:</strong> Custom 8-bit sound effect</p>
+          <p><strong>Description:</strong> Satisfying coin pickup sound</p>
+          <p><strong>Usage:</strong> Triggered when collecting coins</p>
+        </div>
+      </section>
+
+      <section id="graphics">
+        <h2><span class="emoji">🎨</span> Graphics & Visual Assets</h2>
+
+        <div class="credit-item">
+          <h3>Halloween SVG Icons</h3>
+          <p><strong>Source:</strong> <a href="https://www.svgrepo.com" target="_blank" rel="noopener noreferrer">SVG Repo</a></p>
+          <p><strong>Icons Include:</strong> Ghost, Witch, Witch Hat, Spider & Web, Mummy, Scarecrow, Bones, Fangs, Pumpkin silhouettes, Tombstones, Bats</p>
+          <p><strong>Usage:</strong> Halloween decorations, character icons, UI elements</p>
+          <span class="license-badge">CC0 / Public Domain / MIT (varies by icon)</span>
+        </div>
+
+        <div class="credit-item">
+          <h3>Character Sprites</h3>
+          <p><strong>Created by:</strong> Game development team</p>
+          <p><strong>Type:</strong> Custom pixel art characters (Alex, Bella, Charlie, Daisy, Zoe, Leo, Mia, Noah, Chloe, Sam, Finn, Grace, Willow)</p>
+          <p><strong>Description:</strong> Hand-crafted SVG-based pixel art characters with multiple states</p>
+          <p><strong>States:</strong> Happy, sad, left-facing, right-facing animations</p>
+          <span class="license-badge">Original Work - ISC License</span>
+        </div>
+
+        <div class="credit-item">
+          <h3>Fog and Particle Effects</h3>
+          <p><strong>Created by:</strong> Game development team</p>
+          <p><strong>Type:</strong> Custom CSS and Canvas-based effects</p>
+          <p><strong>Description:</strong> Atmospheric fog, floating decorations, glow effects</p>
+          <span class="license-badge">Original Work - ISC License</span>
+        </div>
+      </section>
+
+      <section id="technologies">
+        <h2><span class="emoji">🛠️</span> Technologies & Frameworks</h2>
+
+        <div class="credit-item">
+          <h3>Backend Technologies</h3>
+          <p><strong>Node.js:</strong> JavaScript runtime environment - <a href="https://nodejs.org" target="_blank" rel="noopener noreferrer">nodejs.org</a></p>
+          <p><strong>Express:</strong> Web application framework - <a href="https://expressjs.com" target="_blank" rel="noopener noreferrer">expressjs.com</a></p>
+          <p><strong>Socket.IO:</strong> Real-time bidirectional communication - <a href="https://socket.io" target="_blank" rel="noopener noreferrer">socket.io</a></p>
+          <span class="license-badge">MIT License</span>
+        </div>
+
+        <div class="credit-item">
+          <h3>Database</h3>
+          <p><strong>SQLite:</strong> Lightweight database engine - <a href="https://www.sqlite.org" target="_blank" rel="noopener noreferrer">sqlite.org</a></p>
+          <p><strong>Sequelize:</strong> Promise-based Node.js ORM - <a href="https://sequelize.org" target="_blank" rel="noopener noreferrer">sequelize.org</a></p>
+          <p><strong>Usage:</strong> Player names, game history, leaderboards</p>
+          <span class="license-badge">MIT License / Public Domain</span>
+        </div>
+
+        <div class="credit-item">
+          <h3>Frontend Technologies</h3>
+          <p><strong>HTML5 Canvas:</strong> Graphics rendering API - <a href="https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API" target="_blank" rel="noopener noreferrer">MDN Web Docs</a></p>
+          <p><strong>Vanilla JavaScript:</strong> Core language for game logic and interactions</p>
+          <p><strong>CSS3:</strong> Modern styling with animations and effects</p>
+          <p><strong>Gamepad API:</strong> Controller support - <a href="https://developer.mozilla.org/en-US/docs/Web/API/Gamepad_API" target="_blank" rel="noopener noreferrer">MDN Web Docs</a></p>
+          <span class="license-badge">Web Standards</span>
+        </div>
+
+        <div class="credit-item">
+          <h3>Development Tools</h3>
+          <p><strong>Git:</strong> Version control system</p>
+          <p><strong>NPM:</strong> Package manager for Node.js</p>
+          <p><strong>VS Code:</strong> Code editor</p>
+          <span class="license-badge">Various Open Source Licenses</span>
+        </div>
+      </section>
+
+      <section id="special-thanks">
+        <h2><span class="emoji">💖</span> Special Thanks</h2>
+
+        <div class="credit-item">
+          <h3>Community & Inspiration</h3>
+          <p><strong>Halloween Costume Contest:</strong> For hosting the hackathon and inspiring this project</p>
+          <p><strong>Open Source Community:</strong> For providing tools, libraries, and resources</p>
+          <p><strong>Game Testers:</strong> Friends and family who playtested and provided feedback</p>
+          <p><strong>Players:</strong> Thank you for playing Haunt For Gold!</p>
+        </div>
+
+        <div class="credit-item">
+          <h3>Educational Resources</h3>
+          <p><strong>MDN Web Docs:</strong> Comprehensive web development documentation</p>
+          <p><strong>Stack Overflow:</strong> Developer community support</p>
+          <p><strong>GitHub:</strong> Code hosting and collaboration platform</p>
+        </div>
+      </section>
+
+      <div class="license-note">
+        <p><strong>Legal Notice:</strong> All third-party assets are used in accordance with their respective licenses. 
+        This game is created for educational and entertainment purposes. All trademarks, service marks, trade names, 
+        product names, and logos are the property of their respective owners.</p>
+        
+        <p><strong>Contact:</strong> If you believe any attribution is missing or incorrect, or if you would like your 
+        work to be removed, please contact the repository owner through GitHub.</p>
+        
+        <p><strong>Game License:</strong> Haunt For Gold © 2025 - Licensed under the ISC License</p>
+      </div>
+
+      <a href="index.html" class="back-btn">👻 Back to Game</a>
     </div>
-
-    <div class="credit-item">
-      <h3>8-Bit Video Game Background Music Loop</h3>
-      <p><strong>Source:</strong> Pixabay / Free Music Archive</p>
-    </div>
-
-    <div class="credit-item">
-      <h3>The Race Is On - Racing Soundtrack</h3>
-      <p><strong>Source:</strong> Pixabay / Free Music Archive</p>
-    </div>
-
-    <div class="credit-item">
-      <h3>The Return of the 8-Bit Era</h3>
-      <p><strong>Source:</strong> Pixabay / Free Music Archive</p>
-    </div>
-
-    <h2><span class="emoji">🔊</span> Sound Effects</h2>
-
-    <div class="credit-item">
-      <h3>Explosion Sound Effect</h3>
-      <p><strong>Source:</strong> <a href="https://www.zapsplat.com" target="_blank">Zapsplat.com</a></p>
-    </div>
-
-    <div class="credit-item">
-      <h3>Witch Cackle</h3>
-      <p><strong>Source:</strong> Free Sound Effects</p>
-    </div>
-
-    <h2><span class="emoji">🎨</span> Graphics & Icons</h2>
-
-    <div class="credit-item">
-      <h3>Halloween SVG Icons</h3>
-      <p><strong>Source:</strong> <a href="https://www.svgrepo.com" target="_blank">SVG Repo</a></p>
-      <p>Includes: Ghost, Witch, Witch Hat, Spider & Web, Mummy, Scarecrow, Bones, Fangs, Pumpkin silhouettes</p>
-      <p><strong>License:</strong> CC0 / Public Domain / MIT (varies by icon)</p>
-    </div>
-
-    <h2><span class="emoji">🛠️</span> Technologies</h2>
-
-    <div class="credit-item">
-      <h3>Built With</h3>
-      <p>Node.js, Express, Socket.IO</p>
-      <p>HTML5 Canvas, Vanilla JavaScript</p>
-      <p>SQLite with Sequelize ORM</p>
-    </div>
-
-    <h2><span class="emoji">👨‍💻</span> Development</h2>
-
-    <div class="credit-item">
-      <h3>Haunt For Gold</h3>
-      <p>Created for the Halloween Costume Contest Hackathon</p>
-      <p><strong>License:</strong> ISC License - Copyright © 2025</p>
-    </div>
-
-    <div class="license-note">
-      <p><strong>Note:</strong> All third-party assets are used in accordance with their respective licenses. 
-      If you believe any attribution is missing or incorrect, please contact us.</p>
-    </div>
-
-    <a href="index.html" class="back-btn">👻 Back to Game</a>
   </div>
+
+  <!-- Scroll to Top Button -->
+  <button class="scroll-to-top" id="scrollToTop" aria-label="Scroll to top">↑</button>
+
+  <script>
+    // Search functionality
+    const searchInput = document.getElementById('searchInput');
+    const creditItems = document.querySelectorAll('.credit-item');
+    const sections = document.querySelectorAll('section');
+
+    searchInput.addEventListener('input', (e) => {
+      const searchTerm = e.target.value.toLowerCase();
+      
+      creditItems.forEach(item => {
+        const text = item.textContent.toLowerCase();
+        if (text.includes(searchTerm)) {
+          item.classList.remove('hidden');
+        } else {
+          item.classList.add('hidden');
+        }
+      });
+
+      // Show/hide sections based on whether they have visible items
+      sections.forEach(section => {
+        const visibleItems = section.querySelectorAll('.credit-item:not(.hidden)');
+        if (visibleItems.length === 0 && searchTerm !== '') {
+          section.classList.add('hidden');
+        } else {
+          section.classList.remove('hidden');
+        }
+      });
+    });
+
+    // Scroll to top functionality
+    const scrollToTopBtn = document.getElementById('scrollToTop');
+    
+    window.addEventListener('scroll', () => {
+      if (window.pageYOffset > 300) {
+        scrollToTopBtn.classList.add('visible');
+      } else {
+        scrollToTopBtn.classList.remove('visible');
+      }
+    });
+
+    scrollToTopBtn.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+
+    // Smooth scroll for TOC links
+    document.querySelectorAll('.toc a').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const targetId = link.getAttribute('href');
+        const targetElement = document.querySelector(targetId);
+        if (targetElement) {
+          targetElement.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+
+    // Highlight search matches
+    searchInput.addEventListener('input', (e) => {
+      // Remove previous highlights
+      document.querySelectorAll('.highlight').forEach(el => {
+        el.outerHTML = el.textContent;
+      });
+
+      const searchTerm = e.target.value.trim();
+      if (searchTerm.length < 2) return;
+
+      // Add new highlights
+      creditItems.forEach(item => {
+        if (!item.classList.contains('hidden')) {
+          const regex = new RegExp(`(${searchTerm})`, 'gi');
+          const html = item.innerHTML;
+          // Only highlight text nodes, not attributes or tags
+          item.querySelectorAll('h3, p').forEach(el => {
+            if (el.children.length === 0 || el.children[0].tagName !== 'STRONG') {
+              el.innerHTML = el.textContent.replace(regex, '<mark class="highlight" style="background: rgba(255, 215, 0, 0.3); color: #ffd700; border-radius: 3px; padding: 0 2px;">$1</mark>');
+            }
+          });
+        }
+      });
+    });
+  </script>
 </body>
 </html>

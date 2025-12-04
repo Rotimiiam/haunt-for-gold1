@@ -715,53 +715,87 @@ function restartGame() {
 
 // Return to home screen
 function returnToHome() {
-  const winnerScreen = document.getElementById("winnerScreen");
-  winnerScreen.style.display = "none";
+  console.log("Returning to home screen...");
 
-  // Hide all game elements
-  document.getElementById("gameCanvas").style.display = "none";
-  document.querySelector(".controls").style.display = "none";
-  document.querySelector(".info").style.display = "none";
-  document.getElementById("scoreboard").style.display = "none";
-  document.getElementById("waitingScreen").style.display = "none";
-  document.getElementById("nameDialog").style.display = "none";
-  document.getElementById("musicToggle").style.display = "none";
-  
-  // Exit fullscreen mode
-  if (document.body.classList.contains('fullscreen-mode')) {
-    document.body.classList.remove('fullscreen-mode');
-    resetCanvasSize();
-    window.removeEventListener('resize', resizeCanvas);
-    document.removeEventListener('keydown', preventFullscreenExit);
+  // Use GameLifecycleManager for comprehensive cleanup
+  if (window.gameLifecycleManager) {
+    window.gameLifecycleManager.returnToHome();
+  } else {
+    // Fallback to manual cleanup if manager not available
+    console.warn("GameLifecycleManager not available, using fallback cleanup");
+    
+    const winnerScreen = document.getElementById("winnerScreen");
+    if (winnerScreen) winnerScreen.style.display = "none";
+
+    // Hide all game elements
+    const elementsToHide = [
+      "gameCanvas",
+      "scoreboard",
+      "waitingScreen",
+      "nameDialog",
+      "musicToggle"
+    ];
+    elementsToHide.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = "none";
+    });
+
+    // Hide elements by selector
+    const selectorsToHide = [".controls", ".info", ".game-container"];
+    selectorsToHide.forEach(selector => {
+      const els = document.querySelectorAll(selector);
+      els.forEach(el => el.style.display = "none");
+    });
+    
+    // Exit fullscreen mode
+    if (document.body.classList.contains('fullscreen-mode')) {
+      document.body.classList.remove('fullscreen-mode');
+      resetCanvasSize();
+      window.removeEventListener('resize', resizeCanvas);
+      document.removeEventListener('keydown', preventFullscreenExit);
+    }
+
+    // Reset game state flags
+    gameStarted = false;
+    window.gameStarted = false;
+    window.isPracticeMode = false;
+    
+    // Reset gameState
+    gameState = {
+      players: {},
+      coins: [],
+      enemies: [],
+      myId: null,
+      mapWidth: 20,
+      mapHeight: 15,
+      winningScore: 500,
+      difficultyLevel: 1
+    };
+    gameStateInitialized = false;
+
+    // Cleanup practice mode
+    if (window.practiceMode && window.practiceMode.cleanup) {
+      window.practiceMode.cleanup();
+    }
+
+    // Cleanup multiplayer mode
+    if (window.multiplayerMode) {
+      if (window.multiplayerMode.cleanup) {
+        window.multiplayerMode.cleanup();
+      } else if (window.multiplayerMode.disconnect) {
+        window.multiplayerMode.disconnect();
+      }
+    }
+
+    // Stop background music
+    stopBackgroundMusic();
+
+    // Show home screen
+    const homeScreen = document.getElementById("homeScreen");
+    if (homeScreen) homeScreen.style.display = "block";
   }
-
-  // Reset game state only when actually returning to home
-  gameStarted = false;
-  window.isPracticeMode = false;
   
-  // Only reset gameState if we're actually returning to home
-  gameState = {
-    players: {},
-    coins: [],
-    enemies: [],
-    myId: null,
-    mapWidth: 20,
-    mapHeight: 15,
-    winningScore: 500,
-    difficultyLevel: 1
-  };
-  gameStateInitialized = false;
-
-  // Disconnect multiplayer if active
-  if (window.multiplayerMode && window.multiplayerMode.disconnect) {
-    window.multiplayerMode.disconnect();
-  }
-
-  // Stop background music
-  stopBackgroundMusic();
-
-  // Show home screen
-  document.getElementById("homeScreen").style.display = "block";
+  console.log("Returned to home screen");
 }
 
 console.log("Game core ready");

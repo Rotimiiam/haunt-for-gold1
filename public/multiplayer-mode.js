@@ -20,6 +20,7 @@ class MultiplayerMode {
     this.waitingForOpponent = false;
     this.lastMoveTime = 0;
     this.MOVE_COOLDOWN = 150;
+    this.keyboardHandler = null;
   }
 
   connect() {
@@ -148,6 +149,11 @@ class MultiplayerMode {
       // Show notification only for our own actions
       if (data.playerId === this.gameState.myId) {
         showNotification("Coin collected!", "+10 points");
+        
+        // Play coin collection sound
+        if (window.spookyAudioManager) {
+          window.spookyAudioManager.playCoinCollect();
+        }
       }
       // Note: Game state is updated via gameStateUpdate event
     });
@@ -176,6 +182,11 @@ class MultiplayerMode {
       if (data.playerId === this.gameState.myId) {
         console.log(`Hit bomb ${data.bombId}! Lost 20 points.`);
         showNotification("BOOM! Bomb Hit!", "You lost 20 points!");
+        
+        // Play bomb explosion sound
+        if (window.spookyAudioManager) {
+          window.spookyAudioManager.playBombExplode();
+        }
       }
       // Note: Game state is updated via gameStateUpdate event
     });
@@ -193,6 +204,17 @@ class MultiplayerMode {
     this.socket.on("gameWon", (data) => {
       console.log("Game won:", data);
       this.gameStarted = false;
+      
+      // Stop ambient music
+      if (window.spookyAudioManager) {
+        window.spookyAudioManager.stopAmbient();
+      }
+      
+      // Play victory sound if we won
+      if (window.spookyAudioManager && data.winnerId === this.gameState.myId) {
+        window.spookyAudioManager.playVictory();
+      }
+      
       showWinnerScreen(data);
     });
 
@@ -229,14 +251,8 @@ class MultiplayerMode {
   }
 
   setupControls() {
-    // Button controls
-    document.getElementById("up").addEventListener("click", () => this.move("up"));
-    document.getElementById("down").addEventListener("click", () => this.move("down"));
-    document.getElementById("left").addEventListener("click", () => this.move("left"));
-    document.getElementById("right").addEventListener("click", () => this.move("right"));
-
-    // Keyboard controls
-    document.addEventListener("keydown", (e) => {
+    // Store keyboard handler for cleanup
+    this.keyboardHandler = (e) => {
       if (!this.gameStarted) return;
 
       switch (e.key) {
@@ -265,7 +281,16 @@ class MultiplayerMode {
           this.move("right");
           break;
       }
-    });
+    };
+
+    // Keyboard controls
+    document.addEventListener("keydown", this.keyboardHandler);
+
+    // Button controls
+    document.getElementById("up").addEventListener("click", () => this.move("up"));
+    document.getElementById("down").addEventListener("click", () => this.move("down"));
+    document.getElementById("left").addEventListener("click", () => this.move("left"));
+    document.getElementById("right").addEventListener("click", () => this.move("right"));
   }
 
   move(direction) {
@@ -337,6 +362,14 @@ class MultiplayerMode {
     updatePlayerCount();
     updateScoreboard();
 
+    // Play game start sound and ambient music
+    if (window.spookyAudioManager) {
+      window.spookyAudioManager.playGameStart();
+      setTimeout(() => {
+        window.spookyAudioManager.playAmbient();
+      }, 500);
+    }
+
     // Start game loop
     console.log("Starting game loop - gameStarted:", gameStarted, "practiceMode:", window.practiceMode, "isPracticeMode:", window.isPracticeMode);
     
@@ -357,7 +390,45 @@ class MultiplayerMode {
     }
     this.gameStarted = false;
     this.waitingForOpponent = false;
-    console.log("Multiplayer disconnected - render loop will stop");
+    console.log("Multiplayer disconnected");
+  }
+
+  cleanup() {
+    console.log("Cleaning up multiplayer mode...");
+    
+    // Stop the game
+    this.gameStarted = false;
+    window.gameStarted = false;
+
+    // Stop audio
+    if (window.spookyAudioManager) {
+      window.spookyAudioManager.stopAmbient();
+    }
+
+    // Remove keyboard event listener
+    if (this.keyboardHandler) {
+      document.removeEventListener("keydown", this.keyboardHandler);
+      this.keyboardHandler = null;
+    }
+
+    // Disconnect socket
+    this.disconnect();
+
+    // Clear game state
+    this.gameState = {
+      players: {},
+      coins: [],
+      bombs: [],
+      enemies: [],
+      myId: null,
+      mapWidth: 20,
+      mapHeight: 15,
+      winningScore: 500,
+      difficultyLevel: 1,
+      startTime: null
+    };
+
+    console.log("Multiplayer mode cleanup complete");
   }
 
   restart() {

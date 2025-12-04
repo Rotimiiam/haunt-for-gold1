@@ -17,6 +17,11 @@ class PracticeMode {
     this.gameStarted = false;
     this.lastMoveTime = 0;
     this.MOVE_COOLDOWN = 150;
+    
+    // Track intervals and animation frames for cleanup
+    this.intervals = [];
+    this.animationFrames = [];
+    this.keyboardHandler = null;
   }
 
   start() {
@@ -111,22 +116,8 @@ class PracticeMode {
   }
 
   setupControls() {
-    // Button controls
-    document
-      .getElementById("up")
-      .addEventListener("click", () => this.move("up"));
-    document
-      .getElementById("down")
-      .addEventListener("click", () => this.move("down"));
-    document
-      .getElementById("left")
-      .addEventListener("click", () => this.move("left"));
-    document
-      .getElementById("right")
-      .addEventListener("click", () => this.move("right"));
-
-    // Keyboard controls
-    document.addEventListener("keydown", (e) => {
+    // Store keyboard handler for cleanup
+    this.keyboardHandler = (e) => {
       if (!this.gameStarted) return;
 
       switch (e.key) {
@@ -155,7 +146,25 @@ class PracticeMode {
           this.move("right");
           break;
       }
-    });
+    };
+
+    // Keyboard controls
+    document.addEventListener("keydown", this.keyboardHandler);
+
+    // Button controls - note: these use arrow functions so cleanup is harder
+    // For now, we'll accept they stay registered (they check gameStarted anyway)
+    document
+      .getElementById("up")
+      .addEventListener("click", () => this.move("up"));
+    document
+      .getElementById("down")
+      .addEventListener("click", () => this.move("down"));
+    document
+      .getElementById("left")
+      .addEventListener("click", () => this.move("left"));
+    document
+      .getElementById("right")
+      .addEventListener("click", () => this.move("right"));
   }
 
   move(direction) {
@@ -231,11 +240,21 @@ class PracticeMode {
         player.mood = "sad";
         player.bombsHit = (player.bombsHit || 0) + 1;
         showNotification("Bomb Hit!", "-20 points");
+        
+        // Play bomb explosion sound
+        if (window.spookyAudioManager) {
+          window.spookyAudioManager.playBombExplode();
+        }
       } else {
         player.score += 10;
         player.mood = "happy";
         player.coinsCollected = (player.coinsCollected || 0) + 1;
         showNotification("Coin collected!", "+10 points");
+        
+        // Play coin collection sound
+        if (window.spookyAudioManager) {
+          window.spookyAudioManager.playCoinCollect();
+        }
       }
 
       // Check for winner
@@ -251,7 +270,7 @@ class PracticeMode {
 
   startAI() {
     // AI movement interval
-    setInterval(() => {
+    const aiInterval = setInterval(() => {
       if (!this.gameStarted) return;
 
       const ai = this.gameState.players["ai"];
@@ -276,9 +295,10 @@ class PracticeMode {
         this.updateDisplay();
       }
     }, 800);
+    this.intervals.push(aiInterval);
 
     // Enemy movement interval
-    setInterval(() => {
+    const enemyInterval = setInterval(() => {
       if (!this.gameStarted) return;
 
       this.moveEnemies();
@@ -288,6 +308,7 @@ class PracticeMode {
         this.updateDisplay();
       }
     }, 200); // Enemies move faster than AI
+    this.intervals.push(enemyInterval);
   }
 
   findNearestCoin(player) {
@@ -487,6 +508,14 @@ class PracticeMode {
     // Enter fullscreen
     enterFullscreenMode();
 
+    // Play game start sound and ambient music
+    if (window.spookyAudioManager) {
+      window.spookyAudioManager.playGameStart();
+      setTimeout(() => {
+        window.spookyAudioManager.playAmbient();
+      }, 500);
+    }
+
     // Update displays
     this.updateDisplay();
 
@@ -531,8 +560,9 @@ class PracticeMode {
           console.error("Draw function not found");
         }
 
-        // Continue loop
-        requestAnimationFrame(gameLoop);
+        // Continue loop and track animation frame
+        const frameId = requestAnimationFrame(gameLoop);
+        this.animationFrames.push(frameId);
       }
     };
 
@@ -543,13 +573,24 @@ class PracticeMode {
   showWinner(data) {
     this.gameStarted = false;
     window.gameStarted = false;
+    
+    // Stop ambient music
+    if (window.spookyAudioManager) {
+      window.spookyAudioManager.stopAmbient();
+    }
+    
+    // Play victory sound
+    if (window.spookyAudioManager && data.winnerId === this.gameState.myId) {
+      window.spookyAudioManager.playVictory();
+    }
+    
     showWinnerScreen(data);
   }
 
   checkCoinRespawn() {
-    // Check if all coins are collected
+    // Check if all coins are collected (excluding bombs)
     const uncollectedCoins = this.gameState.coins.filter(
-      (coin) => !coin.collected
+      (coin) => !coin.collected && coin.type !== 'bomb'
     );
 
     if (uncollectedCoins.length === 0) {
@@ -557,6 +598,48 @@ class PracticeMode {
       // Respawn all coins
       this.generateCoins();
     }
+  }
+
+  cleanup() {
+    console.log("Cleaning up practice mode...");
+    
+    // Stop the game
+    this.gameStarted = false;
+    window.gameStarted = false;
+
+    // Stop audio
+    if (window.spookyAudioManager) {
+      window.spookyAudioManager.stopAmbient();
+    }
+
+    // Clear all intervals
+    this.intervals.forEach(interval => clearInterval(interval));
+    this.intervals = [];
+
+    // Cancel all animation frames
+    this.animationFrames.forEach(frame => cancelAnimationFrame(frame));
+    this.animationFrames = [];
+
+    // Remove keyboard event listener
+    if (this.keyboardHandler) {
+      document.removeEventListener("keydown", this.keyboardHandler);
+      this.keyboardHandler = null;
+    }
+
+    // Clear game state
+    this.gameState = {
+      players: {},
+      coins: [],
+      enemies: [],
+      myId: "player1",
+      mapWidth: 20,
+      mapHeight: 15,
+      winningScore: 100,
+      difficultyLevel: 1,
+      startTime: null,
+    };
+
+    console.log("Practice mode cleanup complete");
   }
 
   restart() {

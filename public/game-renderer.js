@@ -14,10 +14,10 @@ class GameRenderer {
     // Constants
     this.TILE_SIZE = 32;
     this.COLORS = {
-      BACKGROUND: "#000000",
-      WALL: "#444444",
+      BACKGROUND: "#1a0a2e", // Haunted purple instead of black
+      WALL: "#2d1b4e", // Deep purple walls
       PLAYER: "#00ff41",
-      COIN: "#ffff00",
+      COIN: "#ffd700", // Cursed gold
       BOMB: "#ff0000",
       ENEMY: "#ff4444",
     };
@@ -118,9 +118,18 @@ class GameRenderer {
   
   // Draw background
   drawBackground(gameState) {
-    this.ctx.fillStyle = this.COLORS.BACKGROUND;
+    // Draw spooky purple gradient background
+    const gradient = this.ctx.createLinearGradient(0, 0, 0, this.canvas.height);
+    gradient.addColorStop(0, '#1a0a2e'); // Haunted purple
+    gradient.addColorStop(0.5, '#16213e'); // Midnight blue
+    gradient.addColorStop(1, '#0d0d0d'); // Spooky black
+    this.ctx.fillStyle = gradient;
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-    this.drawPixelRect(0, 0, this.canvas.width, this.canvas.height, this.textures.grass);
+    
+    // Draw grass texture overlay if loaded
+    if (this.textures.loaded.grass) {
+      this.drawPixelRect(0, 0, this.canvas.width, this.canvas.height, this.textures.grass);
+    }
     
     // Draw grid
     this.ctx.strokeStyle = "rgba(34, 34, 34, 0.3)";

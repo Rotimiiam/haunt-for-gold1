@@ -894,6 +894,121 @@ const characterData = {
                     </svg>`,
     },
   },
+  Willow: {
+    description: "A mysterious witch with a pointed hat and magical purple robes.",
+    svgs: {
+      right_happy: `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+                        <!-- Witch Hat -->
+                        <rect x="10" y="0" width="12" height="2" fill="#2d1b4e"/>
+                        <rect x="12" y="2" width="8" height="2" fill="#2d1b4e"/>
+                        <rect x="14" y="4" width="4" height="4" fill="#2d1b4e"/>
+                        <!-- Hat Brim -->
+                        <rect x="8" y="7" width="16" height="2" fill="#2d1b4e"/>
+                        <!-- Head -->
+                        <rect x="10" y="9" width="12" height="8" fill="#8FBC8F"/>
+                        <!-- Eyes -->
+                        <rect x="13" y="12" width="2" height="2" fill="#00ff41"/>
+                        <rect x="17" y="12" width="2" height="2" fill="#00ff41"/>
+                        <!-- Happy Mouth -->
+                        <rect x="14" y="15" width="4" height="1" fill="#000000"/>
+                        <!-- Witch Robe (Purple) -->
+                        <rect x="10" y="17" width="12" height="8" fill="#6a0dad"/>
+                        <!-- Robe Trim -->
+                        <rect x="10" y="17" width="12" height="1" fill="#9370db"/>
+                        <rect x="10" y="20" width="12" height="1" fill="#9370db"/>
+                        <!-- Right Arm with Wand -->
+                        <rect x="6" y="18" width="4" height="6" fill="#8FBC8F"/>
+                        <!-- Magic Wand -->
+                        <rect x="4" y="20" width="2" height="1" fill="#ffd700"/>
+                        <!-- Star at wand tip -->
+                        <rect x="3" y="19" width="1" height="1" fill="#ffd700"/>
+                        <rect x="3" y="21" width="1" height="1" fill="#ffd700"/>
+                        <!-- Legs -->
+                        <rect x="12" y="25" width="3" height="7" fill="#2d1b4e"/>
+                        <rect x="17" y="25" width="3" height="7" fill="#2d1b4e"/>
+                    </svg>`,
+      right_sad: `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+                        <!-- Witch Hat -->
+                        <rect x="10" y="0" width="12" height="2" fill="#2d1b4e"/>
+                        <rect x="12" y="2" width="8" height="2" fill="#2d1b4e"/>
+                        <rect x="14" y="4" width="4" height="4" fill="#2d1b4e"/>
+                        <!-- Hat Brim -->
+                        <rect x="8" y="7" width="16" height="2" fill="#2d1b4e"/>
+                        <!-- Head -->
+                        <rect x="10" y="9" width="12" height="8" fill="#8FBC8F"/>
+                        <!-- Eyes -->
+                        <rect x="13" y="12" width="2" height="2" fill="#00ff41"/>
+                        <rect x="17" y="12" width="2" height="2" fill="#00ff41"/>
+                        <!-- Sad Mouth -->
+                        <rect x="14" y="16" width="4" height="1" fill="#000000"/>
+                        <!-- Witch Robe (Purple) -->
+                        <rect x="10" y="17" width="12" height="8" fill="#6a0dad"/>
+                        <!-- Robe Trim -->
+                        <rect x="10" y="17" width="12" height="1" fill="#9370db"/>
+                        <rect x="10" y="20" width="12" height="1" fill="#9370db"/>
+                        <!-- Right Arm with Wand -->
+                        <rect x="6" y="18" width="4" height="6" fill="#8FBC8F"/>
+                        <!-- Legs -->
+                        <rect x="12" y="25" width="3" height="7" fill="#2d1b4e"/>
+                        <rect x="17" y="25" width="3" height="7" fill="#2d1b4e"/>
+                    </svg>`,
+      left_happy: `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+                        <!-- Witch Hat -->
+                        <rect x="10" y="0" width="12" height="2" fill="#2d1b4e"/>
+                        <rect x="12" y="2" width="8" height="2" fill="#2d1b4e"/>
+                        <rect x="14" y="4" width="4" height="4" fill="#2d1b4e"/>
+                        <!-- Hat Brim -->
+                        <rect x="8" y="7" width="16" height="2" fill="#2d1b4e"/>
+                        <!-- Head -->
+                        <rect x="10" y="9" width="12" height="8" fill="#8FBC8F"/>
+                        <!-- Eyes -->
+                        <rect x="13" y="12" width="2" height="2" fill="#00ff41"/>
+                        <rect x="17" y="12" width="2" height="2" fill="#00ff41"/>
+                        <!-- Happy Mouth -->
+                        <rect x="14" y="15" width="4" height="1" fill="#000000"/>
+                        <!-- Witch Robe (Purple) -->
+                        <rect x="10" y="17" width="12" height="8" fill="#6a0dad"/>
+                        <!-- Robe Trim -->
+                        <rect x="10" y="17" width="12" height="1" fill="#9370db"/>
+                        <rect x="10" y="20" width="12" height="1" fill="#9370db"/>
+                        <!-- Left Arm with Wand -->
+                        <rect x="22" y="18" width="4" height="6" fill="#8FBC8F"/>
+                        <!-- Magic Wand -->
+                        <rect x="26" y="20" width="2" height="1" fill="#ffd700"/>
+                        <!-- Star at wand tip -->
+                        <rect x="28" y="19" width="1" height="1" fill="#ffd700"/>
+                        <rect x="28" y="21" width="1" height="1" fill="#ffd700"/>
+                        <!-- Legs -->
+                        <rect x="12" y="25" width="3" height="7" fill="#2d1b4e"/>
+                        <rect x="17" y="25" width="3" height="7" fill="#2d1b4e"/>
+                    </svg>`,
+      left_sad: `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+                        <!-- Witch Hat -->
+                        <rect x="10" y="0" width="12" height="2" fill="#2d1b4e"/>
+                        <rect x="12" y="2" width="8" height="2" fill="#2d1b4e"/>
+                        <rect x="14" y="4" width="4" height="4" fill="#2d1b4e"/>
+                        <!-- Hat Brim -->
+                        <rect x="8" y="7" width="16" height="2" fill="#2d1b4e"/>
+                        <!-- Head -->
+                        <rect x="10" y="9" width="12" height="8" fill="#8FBC8F"/>
+                        <!-- Eyes -->
+                        <rect x="13" y="12" width="2" height="2" fill="#00ff41"/>
+                        <rect x="17" y="12" width="2" height="2" fill="#00ff41"/>
+                        <!-- Sad Mouth -->
+                        <rect x="14" y="16" width="4" height="1" fill="#000000"/>
+                        <!-- Witch Robe (Purple) -->
+                        <rect x="10" y="17" width="12" height="8" fill="#6a0dad"/>
+                        <!-- Robe Trim -->
+                        <rect x="10" y="17" width="12" height="1" fill="#9370db"/>
+                        <rect x="10" y="20" width="12" height="1" fill="#9370db"/>
+                        <!-- Left Arm with Wand -->
+                        <rect x="22" y="18" width="4" height="6" fill="#8FBC8F"/>
+                        <!-- Legs -->
+                        <rect x="12" y="25" width="3" height="7" fill="#2d1b4e"/>
+                        <rect x="17" y="25" width="3" height="7" fill="#2d1b4e"/>
+                    </svg>`,
+    },
+  },
 };
 
 // Get random character for new players

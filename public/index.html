@@ -3,7 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Haunt For Gold</title>
+    <meta name="description" content="Haunt For Gold - A spooky multiplayer coin collection game with Halloween theme">
+    <meta name="theme-color" content="#1a0a2e">
+    <title>Haunt For Gold - Spooky Multiplayer Game</title>
+    
+    <!-- Design System CSS -->
+    <link rel="stylesheet" href="css/design-tokens.css">
+    <link rel="stylesheet" href="css/modern-components.css">
+    <link rel="stylesheet" href="css/accessibility.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    
+    <!-- Game-specific CSS -->
     <link rel="stylesheet" href="css/auth.css">
     <link rel="stylesheet" href="css/fonts.css">
     <style>
@@ -1831,6 +1841,8 @@
     <script src="/socket.io/socket.io.js"></script>
     <script src="socket-reconnection.js"></script>
     <script src="spooky-effects.js"></script>
+    <script src="spooky-audio.js"></script>
+    <script src="audio-integration.js"></script>
     <script src="auth.js"></script>
     <script src="components/auth-modal.js"></script>
     <script src="components/user-profile.js"></script>
@@ -1838,6 +1850,15 @@
     <script src="debug.js"></script>
     <script src="direct-auth.js"></script>
     <script src="game-auth-integration.js"></script>
+    
+    <!-- Game Lifecycle Management -->
+    <script src="game-lifecycle-manager.js"></script>
+    
+    <!-- Keyboard Navigation & Accessibility -->
+    <script src="keyboard-navigation.js"></script>
+    <script src="help-modal.js"></script>
+    
+    <!-- Character & Game Logic -->
     <script src="characters.js"></script>
     <script src="game-renderer.js"></script>
     <script src="game-core.js"></script>
